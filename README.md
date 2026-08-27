@@ -1,4 +1,4 @@
-# PureSolidity
+# PureSol
 
 Just a personal practice repo for learning Solidity — messing around with contracts, testing ideas, breaking things, and figuring out why they broke.
 
