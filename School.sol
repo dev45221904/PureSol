@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 contract School{
 
-    uint256 public constant Fees = 2e18;
+    uint256 public constant Fees = 4e18;
 
     uint256 public constant Wages = 1e18;
 
@@ -34,7 +34,8 @@ contract School{
     mapping (uint256 => bool) public WagesGiven;
     mapping (address => bool) public IsFaculty;
     mapping (address => bool) public IsStudent;
-    mapping(address => bool) public StudentPresent;
+    mapping (address => bool) public StudentPresent;
+    mapping (uint256 => bool) public IsHePresent;
 
     constructor()  {
         owner = msg.sender;
@@ -79,7 +80,6 @@ contract School{
     function setclassroom(address _Swallet) public  OnlyFaculty{
         require(HasPaid[_Swallet], "fees not paid");
         classroom.push(_Swallet);
-
     }
 
     function markattendence(address _student) public OnlyFaculty returns(bool){
@@ -87,4 +87,11 @@ contract School{
         StudentPresent[_student] = true;
         return true;
     }
+
+    function PayFaculty(address _faculty) public payable  OnlyAdmin {
+        require(IsFaculty[_faculty], "Not Faculty!!");
+        require(msg.value == Wages, "Invalid Amount");
+        (bool success, ) = _faculty.call{value: Wages}("");
+        require(success, "ETH transfer failed");
+    } 
 }
